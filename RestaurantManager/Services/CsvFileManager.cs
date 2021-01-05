@@ -4,18 +4,26 @@ using System.IO;
 using System.Linq;
 using CsvHelper;
 using RestaurantManager.Interfaces;
+using RestaurantManager.Model;
 
 namespace RestaurantManager.Services
 {
-    public class CsvFileManager<T> : ICsvFileManager<T>
+    public class CsvFileManager<T>: ICsvFileManager<T>
     {
         public List<T> ReadFromFile(string filePath)
         {
-            using (var reader = new StreamReader(filePath))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            if (File.Exists(filePath))
             {
-                var values = csv.GetRecords<T>();
-                return values.ToList();
+                using (var reader = new StreamReader(filePath))
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    var values = csv.GetRecords<T>();
+                    return values.ToList();
+                }
+            }
+            else
+            {
+                return new List<T>();
             }
         }
 

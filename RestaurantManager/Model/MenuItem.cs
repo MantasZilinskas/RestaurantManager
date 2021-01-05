@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using CsvHelper.Configuration.Attributes;
+using RestaurantManager.CsvTypeConverter;
 
 namespace RestaurantManager.Model
 {
@@ -8,6 +8,7 @@ namespace RestaurantManager.Model
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        [TypeConverter(typeof(ToIntArrayConverter))]
         public List<int> Products { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace RestaurantManager
         private static void Main(string[] args)
         {
             IProductConsoleCommands productCommands = new ProductConsoleCommands();
+            IMenuItemConsoleCommands menuItemCommands = new MenuItemConsoleCommands();
             var programRunning = true;
             var line = new string('-', 25);
             Console.WriteLine("Restaurant manager");
@@ -41,6 +42,18 @@ namespace RestaurantManager
                         break;
                     case "UpdateProduct":
                         productCommands.UpdateProduct();
+                        break;
+                    case "AddMenuItem":
+                        menuItemCommands.AddMenuItem();
+                        break;
+                    case "DisplayAllMenuItems":
+                        menuItemCommands.DisplayAllMenuItems();
+                        break;
+                    case "RemoveMenuItem":
+                        menuItemCommands.RemoveMenuItem();
+                        break;
+                    case "UpdateMenuItem":
+                        menuItemCommands.UpdateMenuItem();
                         break;
                     default:
                         Console.WriteLine("There is no such command");

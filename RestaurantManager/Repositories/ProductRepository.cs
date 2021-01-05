@@ -37,18 +37,18 @@ namespace RestaurantManager.Repositories
             var sorted = products.OrderBy(value => value.Id).ToList();
             var id = 1;
             var unique = false;
-            using (var sequenceEnum = sorted.GetEnumerator())
+
+            using var sequenceEnum = sorted.GetEnumerator();
+
+            while (sequenceEnum.MoveNext() && !unique)
             {
-                while (sequenceEnum.MoveNext() && !unique)
+                if (sequenceEnum.Current.Id != id)
                 {
-                    if (sequenceEnum.Current.Id != id)
-                    {
-                        unique = true;
-                    }
-                    else
-                    {
-                        id++;
-                    }
+                    unique = true;
+                }
+                else
+                {
+                    id++;
                 }
             }
 
@@ -68,49 +68,49 @@ namespace RestaurantManager.Repositories
 
         public void Remove(int id)
         {
-            if (File.Exists(FilePath))
+            var products = csvManager.ReadFromFile(FilePath);
+            var existing = products.FirstOrDefault(value => value.Id == id);
+            if (existing == null)
             {
-                var products = csvManager.ReadFromFile(FilePath);
-                var existing = products.FirstOrDefault(value => value.Id == id);
-                if (existing == null)
-                {
-                    Console.WriteLine($"ERROR:Product with id {id} does not exist");
-                }
-                else
-                {
-                    products.Remove(existing);
-                    csvManager.WriteToFile(FilePath,products);
-                }
+                Console.WriteLine($"ERROR:Product with id {id} does not exist");
             }
             else
             {
-                Console.WriteLine($"ERROR:File {FilePath} does not exist");
+                products.Remove(existing);
+                csvManager.WriteToFile(FilePath, products);
             }
-            
         }
 
         public void Update(int id, Product product)
         {
-            if (File.Exists(FilePath))
+            var products = csvManager.ReadFromFile(FilePath);
+            var existing = products.FirstOrDefault(value => value.Id == id);
+            if (existing == null)
             {
-                var products = csvManager.ReadFromFile(FilePath);
-                var existing = products.FirstOrDefault(value => value.Id == id);
-                if (existing == null)
-                {
-                    Console.WriteLine($"ERROR:Product with id {id} does not exist");
-                }
-                else
-                {
-                    products.Remove(existing);
-                    product.Id = id;
-                    products.Add(product);
-                    csvManager.WriteToFile(FilePath, products);
-                }
+                Console.WriteLine($"ERROR:Product with id {id} does not exist");
             }
             else
             {
-                Console.WriteLine($"ERROR:File {FilePath} does not exist");
+                products.Remove(existing);
+                product.Id = id;
+                products.Add(product);
+                csvManager.WriteToFile(FilePath, products);
             }
+        }
+
+        public List<int> ProductsExist(List<int> productIdList)
+        {
+            var products = csvManager.ReadFromFile(FilePath);
+            List<int> nonExistentIds = new List<int>();
+            foreach (var id in productIdList)
+            {
+                var contains = products.Any(value => value.Id == id);
+                if (!contains)
+                {
+                    nonExistentIds.Add(id);
+                }
+            }
+            return nonExistentIds;
         }
     }
 }
