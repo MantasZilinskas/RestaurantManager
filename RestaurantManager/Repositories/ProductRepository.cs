@@ -11,24 +11,25 @@ namespace RestaurantManager.Repositories
     public class ProductRepository : IProductRepository
     {
         private const string FilePath = @"Products.csv";
-        private readonly ICsvFileManager<Product> csvManager;
-
-        public ProductRepository()
+        private readonly ICsvFileManager<Product> _csvManager;
+        private readonly IFileWrapper _fileWrapper;
+        public ProductRepository(ICsvFileManager<Product> csvManager, IFileWrapper fileWrapper)
         {
-            csvManager = new CsvFileManager<Product>();
+            _csvManager = csvManager;
+            _fileWrapper = fileWrapper;
         }
         public void Add(Product product)
         {
-            if (File.Exists(FilePath))
+            if (_fileWrapper.Exists(FilePath))
             {
-                var products = csvManager.ReadFromFile(FilePath);
+                var products = _csvManager.ReadFromFile(FilePath);
                 product.Id = FindUniqueId(products);
-                csvManager.AppendToFile(FilePath, product);
+                _csvManager.AppendToFile(FilePath, product);
             }
             else
             {
                 product.Id = 1;
-                csvManager.WriteToFile(FilePath, new List<Product>() { product });
+                _csvManager.WriteToFile(FilePath, new List<Product>() { product });
             }
         }
 
@@ -58,9 +59,9 @@ namespace RestaurantManager.Repositories
         public List<Product> GetAll()
         {
             var list = new List<Product>();
-            if (File.Exists(FilePath))
+            if (_fileWrapper.Exists(FilePath))
             {
-                list = csvManager.ReadFromFile(FilePath);
+                list = _csvManager.ReadFromFile(FilePath);
             }
 
             return list;
@@ -68,7 +69,7 @@ namespace RestaurantManager.Repositories
 
         public void Remove(int id)
         {
-            var products = csvManager.ReadFromFile(FilePath);
+            var products = _csvManager.ReadFromFile(FilePath);
             var existing = products.FirstOrDefault(value => value.Id == id);
             if (existing == null)
             {
@@ -77,13 +78,13 @@ namespace RestaurantManager.Repositories
             else
             {
                 products.Remove(existing);
-                csvManager.WriteToFile(FilePath, products);
+                _csvManager.WriteToFile(FilePath, products);
             }
         }
 
         public void Update(int id, Product product)
         {
-            var products = csvManager.ReadFromFile(FilePath);
+            var products = _csvManager.ReadFromFile(FilePath);
             var existing = products.FirstOrDefault(value => value.Id == id);
             if (existing == null)
             {
@@ -94,13 +95,13 @@ namespace RestaurantManager.Repositories
                 products.Remove(existing);
                 product.Id = id;
                 products.Add(product);
-                csvManager.WriteToFile(FilePath, products);
+                _csvManager.WriteToFile(FilePath, products);
             }
         }
 
         public List<int> ProductsExist(List<int> productIdList)
         {
-            var products = csvManager.ReadFromFile(FilePath);
+            var products = _csvManager.ReadFromFile(FilePath);
             List<int> nonExistentIds = new List<int>();
             foreach (var id in productIdList)
             {
@@ -115,7 +116,7 @@ namespace RestaurantManager.Repositories
 
         public List<int> DeductProducts(List<int> productIdList)
         {
-            var products = csvManager.ReadFromFile(FilePath);
+            var products = _csvManager.ReadFromFile(FilePath);
             var emptyProducts = CheckAreProductsAvailable(productIdList);
             if (emptyProducts.Count == 0)
             {
@@ -125,14 +126,14 @@ namespace RestaurantManager.Repositories
                     product.PortionCount--;
 
                 }
-                csvManager.WriteToFile(FilePath,products);
+                _csvManager.WriteToFile(FilePath,products);
             }
             return emptyProducts;
         }
 
         private List<int> CheckAreProductsAvailable(List<int> productIdList)
         {
-            var products = csvManager.ReadFromFile(FilePath);
+            var products = _csvManager.ReadFromFile(FilePath);
             var emptyProducts = new List<int>();
             foreach (var productId in productIdList)
             {

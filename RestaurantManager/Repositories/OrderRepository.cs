@@ -14,14 +14,15 @@ namespace RestaurantManager.Repositories
     {
         private const string FilePath = @"Orders.csv";
         private readonly ICsvFileManager<Order> _csvManager;
-
-        public OrderRepository()
+        private readonly IFileWrapper _fileWrapper;
+        public OrderRepository(ICsvFileManager<Order> csvManager, IFileWrapper fileWrapper)
         {
-            _csvManager = new CsvFileManager<Order>();
+            _csvManager = csvManager;
+            _fileWrapper = fileWrapper;
         }
         public void Add(Order order)
         {
-            if (File.Exists(FilePath))
+            if (_fileWrapper.Exists(FilePath))
             {
                 var orders = _csvManager.ReadFromFile(FilePath);
                 order.Id = FindUniqueId(orders);
@@ -60,7 +61,7 @@ namespace RestaurantManager.Repositories
         public List<Order> GetAll()
         {
             var list = new List<Order>();
-            if (File.Exists(FilePath))
+            if (_fileWrapper.Exists(FilePath))
             {
                 list = _csvManager.ReadFromFile(FilePath);
             }

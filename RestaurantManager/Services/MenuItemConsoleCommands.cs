@@ -15,8 +15,8 @@ namespace RestaurantManager.Services
         private readonly IProductRepository _productRepo;
         public MenuItemConsoleCommands()
         {
-            _menuItemRepo = new MenuItemRepository();
-            _productRepo = new ProductRepository();
+            _menuItemRepo = new MenuItemRepository(new CsvFileManager<MenuItem>(), new FileWrapper());
+            _productRepo = new ProductRepository(new CsvFileManager<Product>(), new FileWrapper());
         }
         public void AddMenuItem()
         {

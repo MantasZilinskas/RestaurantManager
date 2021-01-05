@@ -10,7 +10,7 @@ namespace RestaurantManager.Services
         private readonly IProductRepository _productRepo;
         public ProductConsoleCommands()
         {
-            _productRepo = new ProductRepository();
+            _productRepo = new ProductRepository(new CsvFileManager<Product>(), new FileWrapper());
         }
         public void AddProduct()
         {

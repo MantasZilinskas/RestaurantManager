@@ -20,9 +20,9 @@ namespace RestaurantManager.Services
 
         public OrderConsoleCommands()
         {
-            _menuItemRepo = new MenuItemRepository();
-            _orderRepo = new OrderRepository();
-            _productRepo = new ProductRepository();
+            _menuItemRepo = new MenuItemRepository(new CsvFileManager<MenuItem>(), new FileWrapper());
+            _orderRepo = new OrderRepository(new CsvFileManager<Order>(), new FileWrapper());
+            _productRepo = new ProductRepository(new CsvFileManager<Product>(), new FileWrapper());
         }
         public void CreateOrder()
         {
