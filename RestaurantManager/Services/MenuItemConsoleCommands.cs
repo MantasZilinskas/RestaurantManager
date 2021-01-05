@@ -124,7 +124,7 @@ namespace RestaurantManager.Services
                     }
                     else
                     {
-                        Console.Write("ERROR:Products ");
+                        Console.Write("ERROR:Menu items ");
                         foreach (var productId in nonExistentIds)
                         {
                             Console.Write($"{productId} ");

@@ -13,5 +13,7 @@ namespace RestaurantManager.Interfaces
         public void Update(int id, MenuItem menuItem);
         public void Remove(int id);
         public List<MenuItem> GetAll();
+        public List<int> MenuItemsExist(List<int> menuItemIdList);
+        public List<int> GetMenuItemProducts(int menuItemId);
     }
 }

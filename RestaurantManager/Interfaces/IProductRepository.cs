@@ -12,5 +12,6 @@ namespace RestaurantManager.Interfaces
         public void Remove(int id);
         public List<Product> GetAll();
         public List<int> ProductsExist(List<int> productIdList);
+        public List<int> DeductProducts(List<int> productIdList);
     }
 }

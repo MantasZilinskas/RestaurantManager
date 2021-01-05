@@ -97,5 +97,27 @@ namespace RestaurantManager.Repositories
                 _csvManager.WriteToFile(FilePath, menuItems);
             }
         }
+
+        public List<int> MenuItemsExist(List<int> menuItemIdList)
+        {
+            var menuItems = _csvManager.ReadFromFile(FilePath);
+            List<int> nonExistentIds = new List<int>();
+            foreach (var id in menuItemIdList)
+            {
+                var contains = menuItems.Any(value => value.Id == id);
+                if (!contains)
+                {
+                    nonExistentIds.Add(id);
+                }
+            }
+            return nonExistentIds;
+        }
+
+        public List<int> GetMenuItemProducts(int menuItemId)
+        {
+            var menuItems = _csvManager.ReadFromFile(FilePath);
+            var menuItem = menuItems.FirstOrDefault(value => value.Id == menuItemId);
+            return menuItem.Products;
+        }
     }
 }

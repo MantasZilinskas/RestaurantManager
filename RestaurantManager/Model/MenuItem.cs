@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using CsvHelper.Configuration.Attributes;
-using RestaurantManager.CsvTypeConverter;
+using RestaurantManager.CsvHelperConfig;
 
 namespace RestaurantManager.Model
 {

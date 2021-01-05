@@ -12,9 +12,12 @@ namespace RestaurantManager
         {
             IProductConsoleCommands productCommands = new ProductConsoleCommands();
             IMenuItemConsoleCommands menuItemCommands = new MenuItemConsoleCommands();
+            IOrderConsoleCommands orderCommands = new OrderConsoleCommands();
             var programRunning = true;
-            var line = new string('-', 25);
+            var line = new string('-', 40);
             Console.WriteLine("Restaurant manager");
+            Console.WriteLine(line);
+            Console.WriteLine("Type 'help' to see available commands");
             Console.WriteLine(line);
             while (programRunning)
             {
@@ -30,6 +33,7 @@ namespace RestaurantManager
                         Console.Clear();
                         break;
                     case "help":
+                        DisplayAvailableCommands();
                         break;
                     case "AddProduct":
                         productCommands.AddProduct();
@@ -55,6 +59,12 @@ namespace RestaurantManager
                     case "UpdateMenuItem":
                         menuItemCommands.UpdateMenuItem();
                         break;
+                    case "CreateOrder":
+                        orderCommands.CreateOrder();
+                        break;
+                    case "DisplayAllOrders":
+                        orderCommands.DisplayAllOrders();
+                        break;
                     default:
                         Console.WriteLine("There is no such command");
                         break;
@@ -62,6 +72,24 @@ namespace RestaurantManager
             }
             Console.WriteLine("Restaurant manager is closed");
         }
+        private static void DisplayAvailableCommands()
+        {
+            Console.WriteLine("Available commands:");
+            Console.WriteLine("exit -> Closes restaurant manager");
+            Console.WriteLine("help -> Displays all available commands");
+            Console.WriteLine("clear -> Clears Console window");
+            Console.WriteLine("AddProduct -> Creates new product");
+            Console.WriteLine("RemoveProduct -> Removes product");
+            Console.WriteLine("UpdateProduct -> Updates product information");
+            Console.WriteLine("AddMenuItem -> Creates new menu item");
+            Console.WriteLine("RemoveMenuItem -> Removes menu item");
+            Console.WriteLine("UpdateMenuItem -> Updates menu item information");
+            Console.WriteLine("CreateOrder -> Creates new order");
+            Console.WriteLine("DisplayAllOrders -> Displays order information");
+            Console.WriteLine("DisplayAllMenuItems -> Displays menu item information");
+            Console.WriteLine("DisplayAllProducts -> Displays product information");
+        }
 
     }
+    
 }

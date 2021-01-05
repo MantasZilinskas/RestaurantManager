@@ -112,5 +112,37 @@ namespace RestaurantManager.Repositories
             }
             return nonExistentIds;
         }
+
+        public List<int> DeductProducts(List<int> productIdList)
+        {
+            var products = csvManager.ReadFromFile(FilePath);
+            var emptyProducts = CheckAreProductsAvailable(productIdList);
+            if (emptyProducts.Count == 0)
+            {
+                foreach (var productId in productIdList)
+                {
+                    var product = products.FirstOrDefault(value => value.Id == productId);
+                    product.PortionCount--;
+
+                }
+                csvManager.WriteToFile(FilePath,products);
+            }
+            return emptyProducts;
+        }
+
+        private List<int> CheckAreProductsAvailable(List<int> productIdList)
+        {
+            var products = csvManager.ReadFromFile(FilePath);
+            var emptyProducts = new List<int>();
+            foreach (var productId in productIdList)
+            {
+                var product = products.FirstOrDefault(value => value.Id == productId);
+                if (product.PortionCount - 1 < 0)
+                {
+                    emptyProducts.Add(product.Id);
+                }
+            }
+            return emptyProducts;
+        }
     }
 }
