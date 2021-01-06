@@ -117,23 +117,21 @@ namespace RestaurantManager.Repositories
         public List<int> DeductProducts(List<int> productIdList)
         {
             var products = _csvManager.ReadFromFile(FilePath);
-            var emptyProducts = CheckAreProductsAvailable(productIdList);
+            var emptyProducts = CheckAreProductsAvailable(productIdList, products);
             if (emptyProducts.Count == 0)
             {
                 foreach (var productId in productIdList)
                 {
                     var product = products.FirstOrDefault(value => value.Id == productId);
                     product.PortionCount--;
-
                 }
                 _csvManager.WriteToFile(FilePath,products);
             }
             return emptyProducts;
         }
 
-        private List<int> CheckAreProductsAvailable(List<int> productIdList)
+        private List<int> CheckAreProductsAvailable(List<int> productIdList, List<Product> products)
         {
-            var products = _csvManager.ReadFromFile(FilePath);
             var emptyProducts = new List<int>();
             foreach (var productId in productIdList)
             {
