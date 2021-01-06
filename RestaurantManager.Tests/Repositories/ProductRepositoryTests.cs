@@ -38,7 +38,7 @@ namespace RestaurantManager.Tests.Repositories
             // Act
             productRepository.Add(product);
             // Assert
-            _mockCsvFileManager.Verify(manager => manager.AppendToFile(It.IsAny<string>(), It.IsAny<Product>()), Times.Once);
+            _mockCsvFileManager.Verify(manager => manager.AppendToFile(It.IsAny<string>(), product), Times.Once);
         }
         [Fact]
         public void Add_FileDoesNotExist_WritesProductToCsvFile()
@@ -50,7 +50,7 @@ namespace RestaurantManager.Tests.Repositories
             // Act
             productRepository.Add(product);
             // Assert
-            _mockCsvFileManager.Verify(manager => manager.WriteToFile(It.IsAny<string>(), It.IsAny<List<Product>>()), Times.Once);
+            _mockCsvFileManager.Verify(manager => manager.WriteToFile(It.IsAny<string>(), new List<Product>() { product }), Times.Once);
         }
 
         [Fact]
